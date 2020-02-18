@@ -24,11 +24,16 @@ queue_t *q_new()
  */
 void q_free(queue_t *q)
 {
+    list_ele_t *ele;
     if (q == NULL)
         return;
     /* Free queue structure */
-    if (q->head != NULL) {
-        free(q->head);
+    ele = q->head;
+    while (ele != NULL) {
+        q->head = ele->next;
+        free(ele->value);
+        free(ele);
+        ele = q->head;
     }
     free(q);
 }
