@@ -19,9 +19,13 @@ queue_t *q_new()
     return q;
 }
 
-/* Free all storage used by queue */
+/* Free all storage used by queue
+ * No effect if q is NULL
+ */
 void q_free(queue_t *q)
 {
+    if (q == NULL)
+        return;
     /* Free queue structure */
     if (q->head != NULL) {
         free(q->head);
