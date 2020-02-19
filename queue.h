@@ -19,12 +19,14 @@ typedef struct ELE {
      * This array needs to be explicitly allocated and freed
      */
     char *value;
+    struct ELE *prev;
     struct ELE *next;
 } list_ele_t;
 
 /* Queue structure */
 typedef struct {
     list_ele_t *head; /* Linked list of elements */
+    list_ele_t *tail;
     /* TODO: You will need to add more fields to this structure
      *        to efficiently implement q_size and q_insert_tail.
      */

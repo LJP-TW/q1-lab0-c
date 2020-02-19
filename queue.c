@@ -16,6 +16,7 @@ queue_t *q_new()
         return NULL;
     }
     q->head = NULL;
+    q->tail = NULL;
     return q;
 }
 
@@ -69,8 +70,15 @@ bool q_insert_head(queue_t *q, char *s)
         news[tmp] = s[tmp];
     }
     newh->value = news;
+    newh->prev = NULL;
     newh->next = q->head;
+    if (newh->next != NULL) {
+        newh->next->prev = newh;
+    }
     q->head = newh;
+    if (q->tail == NULL) {
+        q->tail = newh;
+    }
     return true;
 ERROR:
     return false;
@@ -85,9 +93,37 @@ ERROR:
  */
 bool q_insert_tail(queue_t *q, char *s)
 {
-    /* TODO: You need to write the complete code for this function */
-    /* Remember: It should operate in O(1) time */
-    /* TODO: Remove the above comment when you are about to implement. */
+    list_ele_t *newh;
+    char *news;
+    unsigned long len, tmp;
+    if (q == NULL)
+        goto _ERROR;
+    newh = malloc(sizeof(list_ele_t));
+    if (newh == NULL)
+        goto _ERROR;
+    len = 0;
+    while (*(s + len))
+        ++len;
+    news = malloc(sizeof(char) * (len + 1));
+    if (news == NULL) {
+        free(newh);
+        goto _ERROR;
+    }
+    for (tmp = 0; tmp <= len; ++tmp) {
+        news[tmp] = s[tmp];
+    }
+    newh->value = news;
+    newh->prev = q->tail;
+    newh->next = NULL;
+    if (newh->prev != NULL) {
+        newh->prev->next = newh;
+    }
+    q->tail = newh;
+    if (q->head == NULL) {
+        q->head = newh;
+    }
+    return true;
+_ERROR:
     return false;
 }
 
