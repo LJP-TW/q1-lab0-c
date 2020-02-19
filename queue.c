@@ -137,9 +137,27 @@ _ERROR:
  */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    /* TODO: You need to fix up this code. */
-    /* TODO: Remove the above comment when you are about to implement. */
-    q->head = q->head->next;
+    if (q == NULL || q->head == NULL)
+        return false;
+    if (sp != NULL) {
+        char *v;
+        unsigned long i;
+        v = q->head->value;
+        for (i = 0; i < bufsize - 1; ++i) {
+            sp[i] = v[i];
+        }
+        sp[i] = '\0';
+    }
+    free(q->head->value);
+    if (q->head == q->tail) {
+        /* There is only one element in list */
+        free(q->head);
+        q->head = q->tail = NULL;
+    } else {
+        q->head = q->head->next;
+        free(q->head->prev);
+        q->head->prev = NULL;
+    }
     return true;
 }
 
