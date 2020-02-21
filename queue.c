@@ -4,6 +4,8 @@
 
 #include "harness.h"
 #include "queue.h"
+#include "sort.h"
+#include "strnatcmp.h"
 
 /*
  * Create empty queue.
@@ -207,6 +209,8 @@ void q_reverse(queue_t *q)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (q == NULL || q->head == NULL || q->head->next == NULL)
+        return;
+    // bubble_sort(q, strnatcasecmp);
+    merge_sort(q, strnatcasecmp);
 }
