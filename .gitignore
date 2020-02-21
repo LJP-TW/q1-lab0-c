@@ -5,3 +5,6 @@ qtest
 .vscode
 .devcontainer
 *.swp
+// For gdb
+.gdb_history
+peda-session-*
