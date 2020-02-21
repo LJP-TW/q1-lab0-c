@@ -141,7 +141,7 @@ static bool do_free(int argc, char *argv[])
         report(3, "Warning: Calling free on null queue");
     error_check();
 
-    if (qcnt > big_queue_size)
+    if (qcnt > (size_t) big_queue_size)
         set_cautious_mode(false);
     if (exception_setup(true))
         q_free(q);
@@ -516,7 +516,7 @@ static bool do_size(int argc, char *argv[])
     exception_cancel();
 
     if (ok) {
-        if (qcnt == cnt) {
+        if (qcnt == (size_t) cnt) {
             report(2, "Queue size = %d", cnt);
         } else {
             report(1,
@@ -585,7 +585,7 @@ static bool show_queue(int vlevel)
     report_noreturn(vlevel, "q = [");
     list_ele_t *e = q->head;
     if (exception_setup(true)) {
-        while (ok && e && cnt < qcnt) {
+        while (ok && e && (size_t) cnt < qcnt) {
             if (cnt < big_queue_size)
                 report_noreturn(vlevel, cnt == 0 ? "%s" : " %s", e->value);
             e = e->next;
@@ -652,7 +652,7 @@ static void queue_init()
 static bool queue_quit(int argc, char *argv[])
 {
     report(3, "Freeing queue");
-    if (qcnt > big_queue_size)
+    if (qcnt > (size_t) big_queue_size)
         set_cautious_mode(false);
 
     if (exception_setup(true))
