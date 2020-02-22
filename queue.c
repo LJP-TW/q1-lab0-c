@@ -73,14 +73,10 @@ bool q_insert_head(queue_t *q, char *s)
         news[tmp] = s[tmp];
     }
     newh->value = news;
-    newh->prev = NULL;
     newh->next = q->head;
-    if (newh->next != NULL) {
-        newh->next->prev = newh;
-    }
     q->head = newh;
     if (q->tail == NULL) {
-        q->tail = newh;
+        q->tail = &(newh->next);
     }
     ++q->size;
     return true;
@@ -117,15 +113,13 @@ bool q_insert_tail(queue_t *q, char *s)
         news[tmp] = s[tmp];
     }
     newh->value = news;
-    newh->prev = q->tail;
     newh->next = NULL;
-    if (newh->prev != NULL) {
-        newh->prev->next = newh;
-    }
-    q->tail = newh;
     if (q->head == NULL) {
         q->head = newh;
+    } else {
+        *(q->tail) = newh;
     }
+    q->tail = &(newh->next);
     ++q->size;
     return true;
 _ERROR:
@@ -142,6 +136,7 @@ _ERROR:
  */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
+    list_ele_t *tmp;
     if (q == NULL || q->head == NULL)
         return false;
     if (sp != NULL) {
@@ -154,14 +149,15 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
         sp[i] = '\0';
     }
     free(q->head->value);
-    if (q->head == q->tail) {
+    if (q->size == 1) {
         /* There is only one element in list */
         free(q->head);
-        q->head = q->tail = NULL;
+        q->head = NULL;
+        q->tail = NULL;
     } else {
-        q->head = q->head->next;
-        free(q->head->prev);
-        q->head->prev = NULL;
+        tmp = q->head->next;
+        free(q->head);
+        q->head = tmp;
     }
     --q->size;
     return true;
@@ -187,19 +183,19 @@ int q_size(queue_t *q)
  */
 void q_reverse(queue_t *q)
 {
-    list_ele_t *nowp, *tmpp;
+    list_ele_t *curr, *prev, *tmp;
     if (q == NULL || q->head == NULL)
         return;
-    nowp = q->head;
-    while (nowp != NULL) {
-        tmpp = nowp->next;
-        nowp->next = nowp->prev;
-        nowp->prev = tmpp;
-        nowp = tmpp;
+    q->tail = &(q->head->next);
+    prev = NULL;
+    curr = q->head;
+    while (curr != NULL) {
+        tmp = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = tmp;
     }
-    tmpp = q->head;
-    q->head = q->tail;
-    q->tail = tmpp;
+    q->head = prev;
 }
 
 /*
@@ -211,6 +207,6 @@ void q_sort(queue_t *q)
 {
     if (q == NULL || q->head == NULL || q->head->next == NULL)
         return;
-    // bubble_sort(q, strnatcasecmp);
-    merge_sort(q, strnatcasecmp);
+    // bubble_sort(q, strnatcmp);
+    merge_sort(q, strnatcmp);
 }

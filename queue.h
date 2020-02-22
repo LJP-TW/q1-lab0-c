@@ -19,14 +19,13 @@ typedef struct ELE {
      * This array needs to be explicitly allocated and freed
      */
     char *value;
-    struct ELE *prev;
     struct ELE *next;
 } list_ele_t;
 
 /* Queue structure */
 typedef struct {
     list_ele_t *head; /* Linked list of elements */
-    list_ele_t *tail;
+    list_ele_t **tail;
     unsigned int size;
 } queue_t;
 

@@ -2,7 +2,8 @@
 #define LAB0_SORT_H
 
 /*
- * This program implements kinds of sorting algorithm for doubly linked list
+ * This program implements kinds of sorting algorithm for singly linked list
+ * You must make sure that queue_t *q, q->head, q->head->next isn't NULL
  */
 
 #include "queue.h"
